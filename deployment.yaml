@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache-test
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      apache-test: web
+  template:
+    metadata:
+      labels:
+        apache-test: web
+    spec:
+      containers:
+      - name: apache-test
+        image: httpd:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apache-test
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    apache-test: web
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30001
